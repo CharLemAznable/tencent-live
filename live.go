@@ -10,6 +10,6 @@ func serveQueryLiveUrl(writer http.ResponseWriter, _ *http.Request) {
     flvUrl := GetCurrentLiveUrl(".flv")
     ResponseJson(writer, Json(map[string]interface{}{
         "m3u8Url": m3u8Url,
-        "flvUrl": flvUrl,
+        "flvUrl":  flvUrl,
     }))
 }
