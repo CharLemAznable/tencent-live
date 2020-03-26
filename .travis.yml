@@ -1,0 +1,47 @@
+arch: amd64
+dist: trusty
+language: go
+go:
+  - 1.12.x
+before_install:
+  - export GO111MODULE=on
+before_script:
+  - |
+    if [ -z "$TRAVIS_TAG" ]; then
+      export TARGET_NAME=tencent-live-dev
+    else
+      export TARGET_NAME=tencent-live-$TRAVIS_TAG
+    fi
+script:
+  - echo "building "$TARGET_NAME" ..."
+  - env GOOS=linux GOARCH=386 go build -ldflags="-s -w" -o $TARGET_NAME.linux.386.bin
+  - env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o $TARGET_NAME.linux.amd64.bin
+  - env GOOS=darwin GOARCH=386 go build -ldflags="-s -w" -o $TARGET_NAME.darwin.386.bin
+  - env GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o $TARGET_NAME.darwin.amd64.bin
+  - env GOOS=windows GOARCH=386 go build -ldflags="-s -w" -o $TARGET_NAME.windows.386.exe
+  - env GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o $TARGET_NAME.windows.amd64.exe
+before_deploy:
+  - wget https://github.com/upx/upx/releases/download/v3.95/upx-3.95-amd64_linux.tar.xz
+  - tar -xvJf upx-3.95-amd64_linux.tar.xz
+  - ./upx-3.95-amd64_linux/upx --brute $TARGET_NAME.linux.386.bin
+  - tar -cvJf $TARGET_NAME.linux.386.tar.xz $TARGET_NAME.linux.386.bin
+  - ./upx-3.95-amd64_linux/upx --brute $TARGET_NAME.linux.amd64.bin
+  - tar -cvJf $TARGET_NAME.linux.amd64.tar.xz $TARGET_NAME.linux.amd64.bin
+  - ./upx-3.95-amd64_linux/upx --brute $TARGET_NAME.darwin.386.bin
+  - tar -cvJf $TARGET_NAME.darwin.386.tar.xz $TARGET_NAME.darwin.386.bin
+  - ./upx-3.95-amd64_linux/upx --brute $TARGET_NAME.darwin.amd64.bin
+  - tar -cvJf $TARGET_NAME.darwin.amd64.tar.xz $TARGET_NAME.darwin.amd64.bin
+  - ./upx-3.95-amd64_linux/upx --brute $TARGET_NAME.windows.386.exe
+  - tar -cvJf $TARGET_NAME.windows.386.tar.xz $TARGET_NAME.windows.386.exe
+  - ./upx-3.95-amd64_linux/upx --brute $TARGET_NAME.windows.amd64.exe
+  - tar -cvJf $TARGET_NAME.windows.amd64.tar.xz $TARGET_NAME.windows.amd64.exe
+deploy:
+  provider: releases
+  api_key:
+    secure: p8M5OgggtN4VP3kgqFeTFI9KbF1BF+kh1+1BmybXfhkYJPIEnPvtb0DQsawv9YrKUdDqHHb8I/frAVKFKR7YGyhvNWFrNmaqc6Gb0XJM4/GWfsDjzbzQuJ2n0BJfSShUSID+VUKyt6WkyYk93Fqba22JBgO4cBHWIhBWvTS7mAU7X8FEFJDQEm5ZMwIvStSxM6d9swZFst/dDVVUTXkiiNpSBVK9dhvf68GIA5je+1h5Q13JCKGAKPZ7Ff+/3qoDCH+YtgMeBJafXMeucH5c0Vs15bzYXmfBFD4mUX6g52KiYcZONEqmjgfLdLkYQJ4j4YM33K58p3vZYA+66PQ6lefv+zShs13uIYtzeLm/d2MsI8ttmxtkXXF+SmePOp3dbaoj4SnXEULcLcMaK5lWmTOKDznwT6Qg/GrZ6rpJUDqqCDyTcEFP/UIVu7JnwcThLhbL70fWTkt1QTnRRolS5PrafYhJ05fPIBbtotk2m5RCHQMM/dNfo9ZUX7QBQItwF9cwALxq3x3FF2iOWxg8gWMvrBoBOsWP2fgKUTmf3nqruH0BnZlTCRnD01AvnCkbXGFqmujNNMQCJYYNzHSS7nOOzSKOVgEn0IVjqzFlp2bwHrpXikqN04RvYs4X3m/7T8jInvn+Ntuh52AIl+c0DXCZMxlmVEKl0bj6fwrxczU=
+  file_glob: true
+  file: $TARGET_NAME.*.tar.xz
+  skip_cleanup: true
+  on:
+    repo: CharLemAznable/tencent-live
+    tags: true

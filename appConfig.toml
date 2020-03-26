@@ -1,0 +1,18 @@
+Port = 20514
+ContextPath = ""
+
+PushServer = ""
+PushSecretKey = ""
+LiveServer = ""
+LiveSecretKey = ""
+
+StreamName = ""
+Timeout = 3600
+
+AmberLoginEnabled = false
+AmberAppId = ""
+AmberEncryptKey = ""
+AmberCookieName = ""
+AmberLoginUrl = ""
+AmberLocalUrl = ""
+AmberForceLogin = true

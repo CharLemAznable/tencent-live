@@ -1,0 +1,51 @@
+@font-face {
+    font-family: 'UbuntuMono';url('../font/UbuntuMono-R.ttf')format('truetype');
+}
+
+@font-face {
+    font-family: 'UbuntuMono-Bord';url('../font/UbuntuMono-B.ttf')format('truetype');
+}
+
+@font-face {
+    font-family: 'UbuntuMono-Italic';url('../font/UbuntuMono-RI.ttf')format('truetype');
+}
+
+@font-face {
+    font-family: 'UbuntuMono-Bord-Italic';url('../font/UbuntuMono-BI.ttf')format('truetype');
+}
+
+body {
+    font-family: UbuntuMono, monospace;
+}
+
+.live-header {
+    border-bottom: 1px solid #404553;
+    background-color: #2B303B;
+}
+
+.live-header .layui-nav {
+    padding: 0;
+    background-color: #2B303B;
+}
+
+.live-main {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    padding: 0;
+}
+
+.live-footer {
+    margin-top: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #666;
+    font-weight: 300;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #eee;
+    z-index: 9999;
+}
